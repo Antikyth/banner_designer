@@ -1,3 +1,7 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
 /// The maximum number of patterns that can be applied to a banner without the use of commands.
 pub const MAX_PATTERNS_SURVIVAL: usize = 6;
 /// The maximum number of patterns that can be applied to a banner, even with the use of commands.
