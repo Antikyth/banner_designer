@@ -1,7 +1,11 @@
+/// The maximum number of patterns that can be applied to a banner without the use of commands.
 pub const MAX_PATTERNS_SURVIVAL: usize = 6;
+/// The maximum number of patterns that can be applied to a banner, even with the use of commands.
 pub const MAX_PATTERNS_COMMANDS: usize = 16;
 
+/// A Minecraft banner design.
 pub struct Banner {
+	/// The base color of the banner.
 	pub color: DyeColor,
 	patterns: [Option<(Pattern, DyeColor)>; MAX_PATTERNS_COMMANDS],
 }
@@ -19,6 +23,7 @@ impl<'a> Iterator for PatternsIter<'a> {
 }
 
 impl Banner {
+	/// Creates a new banner of the given color with no patterns applied.
 	pub fn new(color: DyeColor) -> Self {
 		Self {
 			color,
@@ -26,13 +31,17 @@ impl Banner {
 		}
 	}
 
-	pub fn iter(&self) -> PatternsIter {
+	/// Returns a borrowing iterator over the patterns applied to the banner.
+	pub fn patterns(&self) -> PatternsIter {
 		PatternsIter {
 			iter: self.patterns.iter(),
 		}
 	}
 
-	pub fn name(&self) -> &str {
+	/// Returns the identifier for the banner based on its color.
+	///
+	/// This is used in commands to specify the base color of the banner.
+	pub fn identifier(&self) -> &str {
 		match self.color {
 			DyeColor::White => "white_banner",
 			DyeColor::Orange => "orange_banner",
@@ -57,6 +66,9 @@ impl Banner {
 	}
 }
 
+/// Represents the color of a banner or a pattern applied to it.
+// Note: the colors are split up into groups of 4 purely to make it easier to keep track of where
+// you're reading. There is no significance to their grouping.
 pub enum DyeColor {
 	White,
 	Orange,
@@ -104,6 +116,9 @@ impl DyeColor {
 		}
 	}
 
+	/// Returns the numerical ID of the color, used to refer to the color of a [pattern] in commands.
+	///
+	/// [pattern]: Pattern
 	pub fn id(&self) -> u8 {
 		match self {
 			Self::White => 0,
@@ -129,6 +144,7 @@ impl DyeColor {
 	}
 }
 
+/// A pattern that can be placed on a banner.
 pub enum Pattern {
 	Base,
 
