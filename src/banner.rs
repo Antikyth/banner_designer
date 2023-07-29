@@ -3,10 +3,35 @@ pub const MAX_PATTERNS_COMMANDS: usize = 16;
 
 pub struct Banner {
 	pub color: DyeColor,
-	pub patterns: Vec<(Pattern, DyeColor)>,
+	patterns: [Option<(Pattern, DyeColor)>; MAX_PATTERNS_COMMANDS],
+}
+
+pub struct PatternsIter<'a> {
+	iter: core::slice::Iter<'a, Option<(Pattern, DyeColor)>>,
+}
+
+impl<'a> Iterator for PatternsIter<'a> {
+	type Item = &'a (Pattern, DyeColor);
+
+	fn next(&mut self) -> Option<Self::Item> {
+		self.iter.next().map_or(None, |item| item.as_ref())
+	}
 }
 
 impl Banner {
+	pub fn new(color: DyeColor) -> Self {
+		Self {
+			color,
+			patterns: Default::default(),
+		}
+	}
+
+	pub fn iter(&self) -> PatternsIter {
+		PatternsIter {
+			iter: self.patterns.iter(),
+		}
+	}
+
 	pub fn name(&self) -> &str {
 		match self.color {
 			DyeColor::White => "white_banner",
