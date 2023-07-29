@@ -153,6 +153,8 @@ pub enum Pattern {
 	StripeDownright,
 	StripeDownleft,
 	// }}}
+
+	// Small vertical stripes
 	SmallStripes,
 
 	// CROSSES {{{
@@ -200,6 +202,8 @@ pub enum Pattern {
 	Gradient,
 	GradientUp,
 	// }}}
+
+	// Bricks
 	Bricks,
 
 	// ICONS {{{
@@ -213,6 +217,7 @@ pub enum Pattern {
 }
 
 impl Pattern {
+	/// Returns the name of the pattern, by which its texture can be located.
 	pub fn name(&self) -> &str {
 		match self {
 			Self::Base => "base",
@@ -278,6 +283,7 @@ impl Pattern {
 		}
 	}
 
+	/// Returns the pattern ID used to refer to the pattern in commands.
 	pub fn id(&self) -> &str {
 		match self {
 			Self::Base => "b",
@@ -344,29 +350,56 @@ impl Pattern {
 	}
 }
 
-pub enum PatternItemRequired {
-	No,
-	BedrockOnly,
-	Yes,
+/// The banner pattern item required, if any, to select a particular pattern in a loom.
+pub enum BannerPatternItem<'id> {
+	/// No banner pattern item is required to use this pattern in a loom.
+	None,
+
+	/// A banner pattern item is required to use this pattern in a loom only on Bedrock Edition.
+	BedrockOnly { id: &'id str },
+	/// A banner pattern item is required to use this pattern in a loom on all editions.
+	AllEditions { id: &'id str },
 }
 
 impl Pattern {
-	pub fn banner_pattern_item_required(&self) -> PatternItemRequired {
-		use PatternItemRequired::*;
+	/// Returns the banner pattern required, if any, to select this pattern in a loom.
+	///
+	/// See [`BannerPatternItem`] for more information.
+	pub fn banner_pattern_item_required(&self) -> BannerPatternItem {
+		use BannerPatternItem::*;
 
 		match self {
-			Self::CurlyBorder => BedrockOnly,
+			// BEDROCK ONLY {{{
+			Self::CurlyBorder => BedrockOnly {
+				id: "bordure_indented_banner_pattern",
+			},
 
-			Self::Bricks => BedrockOnly,
+			Self::Bricks => BedrockOnly {
+				id: "field_masoned_banner_pattern",
+			},
+			// }}}
 
-			Self::Globe => Yes,
-			Self::Creeper => Yes,
-			Self::Skull => Yes,
-			Self::Flower => Yes,
-			Self::Mojang => Yes,
-			Self::Piglin => Yes,
-
-			_ => No,
+			// ALL EDITIONS {{{
+			Self::Globe => AllEditions {
+				id: "globe_banner_pattern",
+			},
+			Self::Creeper => AllEditions {
+				id: "creeper_banner_pattern",
+			},
+			Self::Skull => AllEditions {
+				id: "skull_banner_pattern",
+			},
+			Self::Flower => AllEditions {
+				id: "flower_banner_pattern",
+			},
+			Self::Mojang => AllEditions {
+				id: "mojang_banner_pattern",
+			},
+			Self::Piglin => AllEditions {
+				id: "piglin_banner_pattern",
+			},
+			// }}}
+			_ => None,
 		}
 	}
 }
