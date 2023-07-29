@@ -1,5 +1,5 @@
-pub const MAX_PATTERNS_SURVIVAL: usize = 7;
-pub const MAX_PATTERNS_COMMANDS: usize = 17;
+pub const MAX_PATTERNS_SURVIVAL: usize = 6;
+pub const MAX_PATTERNS_COMMANDS: usize = 16;
 
 pub struct Banner {
 	pub color: DyeColor,
